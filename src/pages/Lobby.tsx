@@ -6,6 +6,7 @@ import { Film, Users } from 'lucide-react';
 const Lobby = () => {
   const navigate = useNavigate();
   const [isCreating, setIsCreating] = useState(false);
+  const [roomCode, setRoomCode] = useState('');
 
   const generateRoomId = () => {
     return Math.floor(100000 + Math.random() * 900000).toString();
@@ -17,6 +18,12 @@ const Lobby = () => {
     setTimeout(() => {
       navigate(`/room/${roomId}`);
     }, 500);
+  };
+
+  const handleJoinRoom = () => {
+    if (roomCode.length === 6) {
+      navigate(`/room/${roomCode}`);
+    }
   };
 
   return (
@@ -67,9 +74,14 @@ const Lobby = () => {
                   type="text"
                   placeholder="Enter 6-digit code"
                   maxLength={6}
+                  value={roomCode}
+                  onChange={(e) => setRoomCode(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleJoinRoom()}
                   className="flex-1 h-12 px-4 rounded-xl bg-input border border-border text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary transition-all"
                 />
                 <Button
+                  onClick={handleJoinRoom}
+                  disabled={roomCode.length !== 6}
                   size="lg"
                   variant="secondary"
                   className="px-8 h-12 font-semibold hover:bg-secondary/80 transition-all"
